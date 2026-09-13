@@ -238,6 +238,29 @@ td{color:var(--text)}
 .tier-card.on .tier-foot .go{color:var(--white)}
 .tier-card:focus-visible{outline:2px solid var(--red);outline-offset:3px}
 
+/* ---------- NEXT TIER ---------- */
+.nextwrap{margin-top:clamp(34px,4.4vw,54px);padding-top:clamp(26px,3.2vw,36px);border-top:1px solid var(--line)}
+.nextbtn{display:flex;align-items:center;justify-content:space-between;gap:18px;width:100%;
+  padding:clamp(20px,2.4vw,26px) clamp(20px,2.6vw,30px);border-radius:16px;cursor:pointer;font:inherit;
+  text-align:left;color:inherit;border:1px solid var(--line);background:rgba(255,255,255,.035);
+  position:relative;overflow:hidden;
+  transition:transform .4s cubic-bezier(.16,1,.3,1),border-color .3s ease,background .3s ease}
+.nextbtn::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--ntg,var(--grad));
+  transform:scaleX(0);transform-origin:0 50%;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.nextbtn:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.06)}
+.nextbtn:hover::before{transform:scaleX(1)}
+.nextbtn:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.nextbtn .nb-l{display:flex;flex-direction:column;gap:7px;min-width:0}
+.nextbtn .nb-k{font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.nextbtn .nb-t{font-family:var(--font-display);font-weight:700;font-size:clamp(1.25rem,2.3vw,1.7rem);
+  letter-spacing:-.02em;background:var(--ntg,var(--grad));-webkit-background-clip:text;background-clip:text;color:transparent}
+.nextbtn .nb-s{font-size:.88rem;line-height:1.5;color:var(--muted)}
+.nextbtn .nb-a{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+  background:var(--ntg,var(--grad));color:#fff;font-size:1rem;line-height:1;
+  transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.nextbtn:hover .nb-a{transform:translateX(4px)}
+@media (max-width:560px){.nextbtn{flex-direction:column;align-items:flex-start;gap:20px}}
+
 .panel[hidden]{display:none}
 .panel{animation:panelIn .55s cubic-bezier(.16,1,.3,1) both}
 @keyframes panelIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
@@ -382,6 +405,21 @@ body[data-tier="signature"]{--tg:linear-gradient(100deg,#b13bff 0%,#ff2d55 52%,#
     </div>
   </section>
 
+  <section class="section beat-top">
+    <div class="wrap">
+      <div class="nextwrap reveal">
+        <button class="nextbtn" data-next="showroom" style="--ntg:linear-gradient(100deg,#6a4dff 0%,#b13bff 52%,#e13bc9 100%)">
+          <span class="nb-l">
+            <span class="nb-k">Next tier</span>
+            <span class="nb-t">02 &#8212; Showroom</span>
+            <span class="nb-s">Fixed monthly output across every live site. Account run for you.</span>
+          </span>
+          <span class="nb-a">&#8594;</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <div class="panel" data-t="showroom" hidden>
@@ -435,6 +473,21 @@ body[data-tier="signature"]{--tg:linear-gradient(100deg,#b13bff 0%,#ff2d55 52%,#
         <p class="bigprice">&#8377;45,000</p>
         <p class="per">Per month, fixed deliverables</p>
         <p class="small">Ad spend separate, billed at cost. Campaign fee 35% of the ad budget.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section beat-top">
+    <div class="wrap">
+      <div class="nextwrap reveal">
+        <button class="nextbtn" data-next="signature" style="--ntg:linear-gradient(100deg,#b13bff 0%,#ff2d55 52%,#ff6b3d 100%)">
+          <span class="nb-l">
+            <span class="nb-k">Next tier</span>
+            <span class="nb-t">03 &#8212; Signature</span>
+            <span class="nb-s">A branding mission. Higher output, a face for the firm, us on your side.</span>
+          </span>
+          <span class="nb-a">&#8594;</span>
+        </button>
       </div>
     </div>
   </section>
@@ -550,6 +603,21 @@ body[data-tier="signature"]{--tg:linear-gradient(100deg,#b13bff 0%,#ff2d55 52%,#
     </div>
   </section>
 
+  <section class="section beat-top">
+    <div class="wrap">
+      <div class="nextwrap reveal">
+        <button class="nextbtn" data-next="spotlight" style="--ntg:linear-gradient(100deg,#3b5bff 0%,#6a4dff 62%,#8f57ff 100%)">
+          <span class="nb-l">
+            <span class="nb-k">Back to the start</span>
+            <span class="nb-t">01 &#8212; Spotlight</span>
+            <span class="nb-s">One property. Shot properly. Pay per project, nothing ongoing.</span>
+          </span>
+          <span class="nb-a">&#8594;</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 
@@ -620,16 +688,30 @@ body[data-tier="signature"]{--tg:linear-gradient(100deg,#b13bff 0%,#ff2d55 52%,#
 
 /* ---------- SCROLL REVEAL (waits for the loader) ---------- */
 (function(){
+  var io=null, started=false;
   function start(){
+    if(started) return; started=true;
     var items=document.querySelectorAll('.reveal');
     if(!('IntersectionObserver' in window)){
       Array.prototype.forEach.call(items,function(el){el.classList.add('in');}); return;
     }
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    io=new IntersectionObserver(function(es){es.forEach(function(e){
       if(e.isIntersecting){e.target.classList.add('in');}});},
       {threshold:0.12,rootMargin:'0px 0px -5% 0px'});
     Array.prototype.forEach.call(items,function(el){io.observe(el);});
   }
+  /* Re-arm a set of .reveal nodes: anything already on screen is shown outright,
+     anything below the fold goes back to the observer. Never leaves one stuck at 0. */
+  window.__rearmReveals=function(nodes){
+    if(!started){ start(); }
+    Array.prototype.forEach.call(nodes,function(el){
+      if(!io){ el.classList.add('in'); return; }
+      var r=el.getBoundingClientRect();
+      var vis=r.top<innerHeight*0.95 && r.bottom>0;
+      if(vis){ el.classList.add('in'); }
+      else{ el.classList.remove('in'); io.observe(el); }
+    });
+  };
   window.__startReveals=start;
   addEventListener('siteready',start);
   setTimeout(function(){ start(); },6000);
@@ -688,16 +770,21 @@ body[data-tier="signature"]{--tg:linear-gradient(100deg,#b13bff 0%,#ff2d55 52%,#
     Array.prototype.forEach.call(rs,function(e){ e.classList.remove('in'); });
     void panel.offsetWidth;
     requestAnimationFrame(function(){
-      Array.prototype.forEach.call(rs,function(e){ e.classList.add('in'); });
+      if(window.__rearmReveals) window.__rearmReveals(rs);
+      else Array.prototype.forEach.call(rs,function(e){ e.classList.add('in'); });
     });
   }
+  var first=true;
   function show(id,scroll){
     tabs.forEach(function(t){
       var on=t.dataset.t===id;
       t.classList.toggle('on',on); t.setAttribute('aria-expanded',on?'true':'false');
     });
     panels.forEach(function(p){
-      if(p.dataset.t===id){ p.hidden=false; p.style.animation='none'; void p.offsetWidth; p.style.animation=''; replay(p); }
+      if(p.dataset.t===id){
+        p.hidden=false;
+        if(!first){ p.style.animation='none'; void p.offsetWidth; p.style.animation=''; replay(p); }
+      }
       else p.hidden=true;
     });
     document.body.setAttribute('data-tier',id);
@@ -711,6 +798,16 @@ body[data-tier="signature"]{--tg:linear-gradient(100deg,#b13bff 0%,#ff2d55 52%,#
   var start=(location.hash||'').replace('#','');
   if(!tabs.some(function(t){return t.dataset.t===start;})) start=tabs[0].dataset.t;
   show(start,false);
+  first=false;
+
+  /* next-tier buttons */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-next]'),function(b){
+    b.addEventListener('click',function(){
+      show(b.dataset.next,false);
+      var row=document.getElementById('switcher');
+      if(row) scrollTo({top:row.getBoundingClientRect().top+scrollY-90,behavior:'smooth'});
+    });
+  });
 })();
 
 /* ---------- SCROLL TO TOP ---------- */
